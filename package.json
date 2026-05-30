@@ -1,0 +1,32 @@
+{
+  "name": "twos-complement-quest",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Interactive, gamified app for learning two's complement (HKDSE ICT)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.4",
+    "pinia": "^2.3.1",
+    "vue": "^3.5.35",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^25.9.1",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.3",
+    "vitest": "^4.1.7",
+    "vue-tsc": "^2.2.12"
+  }
+}
