@@ -5,10 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Allow pushing the built site to the gh-pages branch.
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 # Allow only one concurrent deployment.
 concurrency:
@@ -16,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,21 +28,17 @@ jobs:
       - run: npm ci
 
       - run: npm run build
-        env:
-          # Serve assets from /<repo>/ on GitHub Pages. The workflow derives
-          # the repo name automatically so this works for any fork/rename.
-          VITE_BASE: /${{ github.event.repository.name }}/
 
-      - uses: actions/upload-pages-artifact@v3
+      # Push the contents of dist/ to the gh-pages branch. Pages then serves
+      # the site straight from that branch.
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: ./dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          force_orphan: true
+          # Custom domain: keeps the CNAME on the gh-pages branch so Pages
+          # doesn't drop the custom-domain setting on each deploy. Replace with
+          # your domain, e.g. twoscomplement.example.com.
+          cname: twoscomplement.casperong.xyz

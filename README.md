@@ -29,15 +29,23 @@ unit tests in `src/lib/twosComplement.test.ts`.
 
 ## Deploying to GitHub Pages
 
-A workflow at `.github/workflows/deploy.yml` builds and deploys on every push to `main`.
+A workflow at `.github/workflows/deploy.yml` builds the app and pushes `dist/` to a
+`gh-pages` branch on every push to `main`. GitHub Pages serves the site from that branch.
 
 1. Push this repo to GitHub.
-2. In **Settings → Pages**, set **Source** to **GitHub Actions**.
-3. Push to `main`. The site publishes at `https://<user>.github.io/<repo>/`.
+2. Push to `main` once so the workflow runs and creates the `gh-pages` branch.
+3. In **Settings → Pages**, set **Source** to **Deploy from a branch**, then pick
+   **`gh-pages`** / **`/ (root)`**.
+4. Under **Custom domain**, enter your domain and save. Point your DNS at GitHub Pages
+   (a `CNAME` record to `<user>.github.io`, or `A`/`AAAA` records for an apex domain).
 
-The workflow sets `VITE_BASE` to `/<repo>/` automatically, so asset paths are correct
-regardless of the repository name. For local builds the base defaults to
-`/twoscomplement/`; override with `VITE_BASE=/ npm run build` to build for a root domain.
+Because the site is served from the domain root, the Vite `base` stays `/` (the default
+in `vite.config.ts`) — no `VITE_BASE` override is needed.
+
+> Update the `cname:` value in `.github/workflows/deploy.yml` to your actual domain.
+> That keeps the `CNAME` file on the `gh-pages` branch so the custom-domain setting
+> survives each deploy. If you ever serve from `https://<user>.github.io/<repo>/`
+> instead, remove the `cname:` line and set `VITE_BASE: /<repo>/` on the build step.
 
 ## Project structure
 
